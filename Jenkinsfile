@@ -22,7 +22,7 @@ pipeline{
         
         stage('Docker Build'){
             steps{
-                sh "docker build . -t samirjarika/hariapp:${DOCKER_TAG} "
+                sh "docker build . -t samirjarika/hariapp1:${DOCKER} "
             }
         }
         
@@ -32,13 +32,13 @@ pipeline{
                     sh "docker login -u samirjarika -p ${dockerHubPwd}"
                 }
                 
-                sh "docker push samirjarika/hariapp:${DOCKER_TAG} "
+                sh "docker push samirjarika/hariapp1:${DOCKER} "
             }
         }
         
         stage('Docker Deploy'){
             steps{
-              ansiblePlaybook credentialsId: 'dev-server1', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER_TAG}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
+              ansiblePlaybook credentialsId: 'dev-server', disableHostKeyChecking: true, extras: "-e DOCKER_TAG=${DOCKER}", installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy-docker.yml'
             }
         }
     }
